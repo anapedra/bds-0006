@@ -69,8 +69,6 @@ public class UserDTO implements Serializable {
     }
 
 
-    public User getAuthorities() {
-        return getAuthorities();
-    }
+
 }
 

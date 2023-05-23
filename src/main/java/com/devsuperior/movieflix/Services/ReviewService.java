@@ -38,16 +38,19 @@ public class ReviewService {
 
     @Transactional
     public ReviewDTO insert(ReviewDTO dto) {
-        var review=new Review();
-        review.setText(dto.getText());
-        Movie movie=new Movie();
-        movie.setId(dto.getMovieId());
-        review.setMovie(movie);
-        User user=new User();
-        review.setUser(dto.getUserDTO().getAuthorities());
-        review=repository.save(review);
-        return new ReviewDTO(review);
-    }
+        User user = authService.authenticated();
+        try {
+            Review entity = new Review();
+            entity.setMovie(movieRepository.getOne(dto.getMovieId()));
+            entity.setUser(user);
+            entity.setText(dto.getText());
+            repository.save(entity);
+            return new ReviewDTO(entity);
+        }
+        catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Id not found " + dto.getMovieId());
+        }
+}
 }
 
 

@@ -20,7 +20,7 @@ public class ReviewDTO implements Serializable {
         @NotBlank(message = "Campo obrigatório!")
         private String text;
         private Long movieId;
-        private UserDTO userDTO;
+        private UserDTO user;
 
 
 
@@ -28,18 +28,18 @@ public class ReviewDTO implements Serializable {
 
     }
 
-    public ReviewDTO(Long id, String text, Long movieId, UserDTO userDTO) {
+    public ReviewDTO(Long id, String text, Long movieId, UserDTO user) {
         this.id = id;
         this.text = text;
         this.movieId = movieId;
-        this.userDTO = userDTO;
+        this.user = user;
     }
 
     public ReviewDTO(Review entytie) {
         id = entytie.getId();
         text = entytie.getText();
         movieId = entytie.getMovie().getId();
-
+        user = new UserDTO(entytie.getUser());
     }
 
 
@@ -68,12 +68,12 @@ public class ReviewDTO implements Serializable {
         this.movieId = movieId;
     }
 
-    public UserDTO getUserDTO() {
-        return userDTO;
+    public UserDTO getUser() {
+        return user;
     }
 
-    public void setUserDTO(UserDTO userDTO) {
-        this.userDTO = userDTO;
+    public void setUser(UserDTO user) {
+        this.user = user;
     }
 
     @Override

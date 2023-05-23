@@ -4,6 +4,7 @@ import com.devsuperior.movieflix.Services.ReviewService;
 import com.devsuperior.movieflix.dto.ReviewDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,14 +17,14 @@ import java.net.URI;
 @RestController
 @RequestMapping(value = "/reviews")
 public class ReviewResource {
-    @Autowired
-    private ReviewService service;
-
-    @PostMapping
-    public ResponseEntity<ReviewDTO> insert(@RequestBody @Valid ReviewDTO dto) {
-        ReviewDTO newDto = service.insert(dto);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(newDto.getId()).toUri();
-        return ResponseEntity.created(uri).body(newDto);
-    }
+        @Autowired
+        private ReviewService service;
+        @PreAuthorize("hasAnyRole('MEMBER')")
+        @PostMapping
+        public ResponseEntity<ReviewDTO> insert(@Valid @RequestBody ReviewDTO dto) {
+            ReviewDTO newDto = service.insert(dto);
+            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                    .buildAndExpand(newDto.getId()).toUri();
+            return ResponseEntity.created(uri).body(newDto);
+        }
 }
